@@ -101,6 +101,7 @@ wt <- 1 / lm(abs(MC25data_wide.lm$residuals) ~ MC25data_wide.lm$fitted.values)$f
 
 #making the weighted least squares model with both treatments as a single one
 wls_model <- lm(audpc ~ trt2, data = MC25data_wide, weights=wt)
+anova(wls_model)
 
 #we make a linear model that includes both factors separately
 MC25data_wide.lm.both <- lm(audpc ~ concentration * inoc_method,  data=MC25data_wide)
@@ -124,10 +125,18 @@ violin_plot <- ggplot(MC25data_wide, aes(x = inoc_method, y = audpc, fill = conc
   geom_violin(trim = FALSE) +
   scale_fill_brewer(palette = "YlOrRd") +
   scale_x_discrete(labels = new_labels) +
-  labs(x = "Inoculation Method", y = "AUDPC", fill = "Spore Concentration", title = "Two-factor Experiment for Inoculation Method vs. Spore Concentration")
+  labs(x = "Inoculation Method", y = "AUDPC", fill = "Spore Concentration") +
+  theme(axis.title.x = element_text(size = 16), 
+        axis.title.y = element_text(size = 16),
+        axis.text.x = element_text(size = 16), 
+        axis.text.y = element_text(size = 16),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 16))
+print(violin_plot)
 
 #saving the plot as a jpeg
 jpeg(filename = "violin_plot.jpeg", width = 1100, height = 800, units = "px", res = 100)
 violin_plot
 dev.off()
 
+ggsave("violin_plot2.png", width = 15, height = 7)
